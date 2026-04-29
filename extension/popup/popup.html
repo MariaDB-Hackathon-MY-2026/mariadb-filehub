@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>File Vault</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+<div class="app">
+
+  <!-- Header -->
+  <header>
+    <div class="logo">
+      <span class="logo-icon">⬡</span>
+      <span class="logo-text">FILE<span class="accent">VAULT</span></span>
+    </div>
+    <div class="header-right">
+      <span class="pulse-dot"></span>
+      <span id="serverStatus" class="server-label">ONLINE</span>
+      <button id="settingsBtn" class="icon-hdr-btn" title="Settings">⚙</button>
+    </div>
+  </header>
+
+  <!-- Tab Bar -->
+  <nav class="tab-bar">
+    <button class="tab active" data-tab="files">FILES</button>
+    <button class="tab" data-tab="dashboard">DASHBOARD</button>
+    <button class="tab" data-tab="trash">🗑 TRASH</button>
+  </nav>
+
+  <!-- ═══ FILES TAB ═══ -->
+  <div id="tab-files" class="tab-content active">
+
+    <!-- Drop Zone / Upload -->
+    <section id="dropZone" class="drop-zone">
+      <div class="drop-inner">
+        <span class="drop-icon">⬆</span>
+        <span class="drop-text">Drop file or <label for="fileInput" class="browse-link">browse</label></span>
+        <div class="drop-actions">
+          <button id="clipboardBtn"  class="sync-btn" title="Paste from clipboard">📋</button>
+          <button id="captureBtn"    class="sync-btn" title="Capture current page">🌐</button>
+          <button id="urlImportBtn"  class="sync-btn" title="Import from URL">🔗</button>
+          <button id="folderUploadBtn" class="sync-btn" title="Upload entire folder">📂</button>
+        </div>
+      </div>
+      <input type="file" id="fileInput" hidden />
+      <input type="file" id="folderInput" webkitdirectory hidden />
+
+      <!-- URL import panel (hidden by default) -->
+      <div id="urlImportPanel" style="display:none;flex-direction:column;gap:6px">
+        <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);letter-spacing:1px">
+          SUPPORTS: Google Drive · OneDrive · Dropbox · S3 · Direct URL
+        </div>
+        <input type="url" id="urlImportInput" class="setting-input"
+               placeholder="https://drive.google.com/file/d/…" />
+        <input type="text" id="urlImportName" class="setting-input"
+               placeholder="Custom filename (optional)" />
+        <div style="display:flex;gap:6px">
+          <button id="urlImportGo"     class="btn btn-primary" style="flex:1;justify-content:center">⬇ IMPORT</button>
+          <button id="urlImportCancel" class="btn btn-ghost">CANCEL</button>
+        </div>
+        <div id="urlImportStatus" style="font-family:var(--font-mono);font-size:10px;color:var(--cyan);line-height:1.5;word-break:break-word"></div>
+      </div>
+
+      <!-- Folder upload confirm panel (hidden by default) -->
+<div id="folderConfirmPanel" style="display:none;flex-direction:column;gap:6px">
+        <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);letter-spacing:1px" id="folderConfirmInfo">0 FILES SELECTED</div>
+        <label style="display:flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:10px;cursor:pointer">
+          <input type="checkbox" id="folderCreateVault" checked />
+          <span style="color:var(--text)">Create vault folder from directory name</span>
+        </label>
+        <div style="display:flex;gap:6px">
+          <button id="folderConfirmGo"     class="btn btn-primary" style="flex:1;justify-content:center">⬆ UPLOAD ALL</button>
+          <button id="folderConfirmCancel" class="btn btn-ghost">CANCEL</button>
+        </div>
+      </div>
+
+      <!-- Folder upload progress panel (hidden by default) -->
+      <div id="folderProgressPanel" style="display:none;flex-direction:column;gap:4px">
+        <div id="folderProgressInfo" style="font-family:var(--font-mono);font-size:10px;color:var(--cyan)">UPLOADING 0 / 0</div>
+        <div class="progress-track"><div id="folderProgressBar" class="progress-bar"></div></div>
+        <div id="folderProgressFile" style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
+      </div>
+
+      <div id="selectedFile" class="selected-file"></div>
+      <div id="progressWrap" class="progress-wrap" style="display:none">
+        <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
+        <span id="progressLabel" class="progress-label"></span>
+      </div>
+      <button id="uploadBtn" class="btn btn-primary" disabled><span>⬆</span> UPLOAD</button>
+    </section>
+
+    <!-- Search -->
+    <section class="search-section">
+      <div class="search-box">
+        <span class="search-icon">⌕</span>
+        <input type="text" id="searchInput" placeholder="Search by content similarity…" />
+        <button id="clearSearchBtn" class="clear-btn" style="display:none">✕</button>
+      </div>
+      <button id="searchBtn" class="btn btn-search">SEARCH</button>
+    </section>
+
+    <!-- Search history chips -->
+    <div id="searchHistory" class="search-history" style="display:none"></div>
+
+    <!-- Search type filter (shown only in search mode) -->
+    <div id="searchTypeFilter" class="search-type-filter" style="display:none">
+      <span class="ctrl-label">FILTER</span>
+      <button class="stype-btn active" data-type="">ALL</button>
+      <button class="stype-btn" data-type="pdf">PDF</button>
+      <button class="stype-btn" data-type="docx">DOCX</button>
+      <button class="stype-btn" data-type="image">IMG</button>
+      <button class="stype-btn" data-type="audio">AUDIO</button>
+      <button class="stype-btn" data-type="video">VIDEO</button>
+      <button class="stype-btn" data-type="code">CODE</button>
+    </div>
+
+    <!-- Controls -->
+    <section class="controls-section">
+      <div class="control-row">
+        <span class="ctrl-label">SORT</span>
+        <button class="sort-btn active" data-sort="uploaded_at">TIME</button>
+        <button class="sort-btn" data-sort="filename">NAME</button>
+        <button class="sort-btn" data-sort="size_bytes">SIZE</button>
+        <button id="orderBtn" class="order-btn" data-order="desc">↓</button>
+        <button id="favsBtn" class="fav-filter-btn" title="Show favourites only">☆</button>
+        <button id="folderBtn" class="folder-filter-btn" title="Filter by folder">📁 ▾</button>
+      </div>
+      <div class="control-row">
+        <span class="ctrl-label">TYPE</span>
+        <button class="filter-btn active" data-type="">ALL</button>
+        <button class="filter-btn" data-type="pdf">PDF</button>
+        <button class="filter-btn" data-type="docx">DOCX</button>
+        <button class="filter-btn" data-type="image">IMG</button>
+        <button class="filter-btn" data-type="audio">AUDIO</button>
+        <button class="filter-btn" data-type="video">VIDEO</button>
+        <button class="filter-btn" data-type="code">CODE</button>
+        <button class="filter-btn" data-type="other">OTHER</button>
+      </div>
+    </section>
+
+    <!-- Folder dropdown panel -->
+    <div id="folderPanel" class="folder-panel" style="display:none">
+      <div class="folder-panel-header">
+        <span>FOLDERS</span>
+        <button id="newFolderBtn" class="btn btn-sm btn-primary">+ NEW</button>
+      </div>
+      <div id="folderList" class="folder-list"></div>
+      <div id="newFolderRow" class="new-folder-row" style="display:none">
+        <input type="text" id="newFolderInput" class="setting-input" placeholder="Folder name…" />
+        <button id="newFolderSave" class="btn btn-sm btn-primary">ADD</button>
+      </div>
+    </div>
+
+    <!-- File List -->
+    <section class="list-section">
+      <div id="fileList" class="file-list"></div>
+      <div id="loadMoreWrap" style="display:none">
+        <button id="loadMoreBtn" class="btn btn-ghost load-more">LOAD MORE</button>
+      </div>
+      <div id="emptyState" class="empty-state" style="display:none">
+        <div class="empty-icon">◈</div>
+        <div id="emptyMsg">NO FILES FOUND</div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ═══ DASHBOARD TAB ═══ -->
+  <div id="tab-dashboard" class="tab-content" style="display:none">
+    <div class="dashboard">
+      <div class="dash-cards">
+        <div class="dash-card">
+          <div class="dash-value" id="dashTotal">—</div>
+          <div class="dash-label">TOTAL FILES</div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-value" id="dashSize">—</div>
+          <div class="dash-label">STORAGE USED</div>
+        </div>
+      </div>
+      <div class="dash-section-title">BY TYPE</div>
+      <div id="dashByType" class="dash-bars"></div>
+      <div class="dash-section-title">RECENT UPLOADS</div>
+      <div id="dashRecent" class="dash-recent"></div>
+    </div>
+  </div>
+
+  <!-- ═══ TRASH TAB ═══ -->
+  <div id="tab-trash" class="tab-content" style="display:none">
+    <div class="trash-header">
+      <span class="trash-hint">Files are kept for 30 days · Powered by MariaDB Temporal Tables</span>
+      <button id="emptyTrashBtn" class="btn btn-sm" style="border-color:#ef4444;color:#ef4444">EMPTY TRASH</button>
+    </div>
+    <div class="list-section">
+      <div id="trashList" class="file-list"></div>
+      <div id="trashEmpty" class="empty-state" style="display:none">
+        <div class="empty-icon">🗑</div>
+        <div>TRASH IS EMPTY</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SETTINGS PANEL (overlay) ═══ -->
+  <div id="settingsPanel" class="settings-panel" style="display:none">
+    <div class="settings-header">
+      <span class="settings-title">⚙ SETTINGS</span>
+      <button id="settingsClose" class="icon-hdr-btn">✕</button>
+    </div>
+    <div class="settings-body">
+      <label class="setting-label">SERVER URL</label>
+      <input type="text" id="serverUrlInput" class="setting-input" placeholder="http://localhost:3001" />
+      <button id="saveServerUrl" class="btn btn-primary" style="align-self:flex-start">SAVE</button>
+      <div id="serverUrlStatus" class="setting-status"></div>
+
+      <div class="setting-divider"></div>
+      <label class="setting-label">ACCOUNT</label>
+      <div id="settingsUser" class="setting-info">—</div>
+      <button id="logoutBtn" class="btn btn-sm" style="align-self:flex-start;border-color:#ef4444;color:#ef4444">LOGOUT</button>
+
+      <div class="setting-divider"></div>
+      <label class="setting-label">WINDOW SIZE</label>
+      <div class="size-presets">
+        <div class="size-preset-group">
+          <span class="size-axis-label">WIDTH</span>
+          <button class="size-btn" data-axis="width" data-val="360">S</button>
+          <button class="size-btn" data-axis="width" data-val="480">M</button>
+          <button class="size-btn" data-axis="width" data-val="620">L</button>
+          <button class="size-btn" data-axis="width" data-val="780">XL</button>
+        </div>
+        <div class="size-preset-group">
+          <span class="size-axis-label">HEIGHT</span>
+          <button class="size-btn" data-axis="height" data-val="480">S</button>
+          <button class="size-btn" data-axis="height" data-val="580">M</button>
+          <button class="size-btn" data-axis="height" data-val="720">L</button>
+          <button class="size-btn" data-axis="height" data-val="900">XL</button>
+        </div>
+      </div>
+      <button id="popoutBtn" class="btn btn-ghost" style="align-self:flex-start">⧉ POP OUT WINDOW</button>
+
+      <div class="setting-divider"></div>
+      <label class="setting-label">VERSION</label>
+      <div class="setting-info">File Vault v1.0.0</div>
+      <div class="setting-info dim">MariaDB · Cloudflare R2 · OpenAI</div>
+    </div>
+  </div>
+
+  <!-- Hover Preview Tooltip -->
+  <div id="previewTooltip" class="preview-tooltip" style="display:none">
+    <div id="previewContent" class="preview-content"></div>
+  </div>
+
+  <!-- ═══ AUTH SCREEN (shown when not logged in) ═══ -->
+  <div id="authScreen" class="auth-screen" style="display:none">
+    <div class="auth-box">
+      <div class="auth-logo">
+        <span class="auth-logo-icon">⬡</span>
+        <span class="auth-logo-text">FILE<span class="accent">VAULT</span></span>
+      </div>
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-mode="login">LOGIN</button>
+        <button class="auth-tab" data-mode="register">REGISTER</button>
+      </div>
+
+      <!-- Login -->
+      <form id="loginForm" class="auth-form" autocomplete="on">
+        <input type="email"    id="loginEmail"    class="auth-input" placeholder="Email" required />
+        <input type="password" id="loginPassword" class="auth-input" placeholder="Password" required />
+        <button type="submit"  class="btn btn-primary auth-submit">LOGIN</button>
+        <button type="button"  id="forgotLink" class="auth-link">Forgot password?</button>
+        <div id="loginError" class="auth-error"></div>
+      </form>
+
+      <!-- Forgot Password — Step 1: enter email -->
+      <form id="forgotForm" class="auth-form" style="display:none">
+        <div class="auth-hint">Enter your email and we'll send a 6-digit reset code.</div>
+        <input type="email" id="forgotEmail" class="auth-input" placeholder="Email" required />
+        <button type="submit" class="btn btn-primary auth-submit">SEND CODE</button>
+        <button type="button" id="backToLogin" class="auth-link">← Back to login</button>
+        <div id="forgotError" class="auth-error"></div>
+      </form>
+
+      <!-- Reset Password — Step 2: OTP + new password -->
+      <form id="resetForm" class="auth-form" style="display:none">
+        <div class="auth-hint">Enter the 6-digit code sent to your email.</div>
+        <input type="text"     id="resetOtp"      class="auth-input auth-otp" placeholder="000000" maxlength="6" required />
+        <input type="password" id="resetPassword" class="auth-input" placeholder="New password (min 6 chars)" required />
+        <button type="submit"  class="btn btn-primary auth-submit">RESET PASSWORD</button>
+        <button type="button"  id="backToForgot" class="auth-link">← Resend code</button>
+        <div id="resetError" class="auth-error"></div>
+      </form>
+
+      <!-- Register -->
+      <form id="registerForm" class="auth-form" style="display:none" autocomplete="on">
+        <input type="text"     id="regUsername" class="auth-input" placeholder="Username" required />
+        <input type="email"    id="regEmail"    class="auth-input" placeholder="Email" required />
+        <input type="password" id="regPassword" class="auth-input" placeholder="Password (min 6 chars)" required />
+        <button type="submit"  class="btn btn-primary auth-submit">CREATE ACCOUNT</button>
+        <div id="registerError" class="auth-error"></div>
+      </form>
+    </div>
+  </div>
+
+</div>
+<script src="popup.js"></script>
+</body>
+</html>

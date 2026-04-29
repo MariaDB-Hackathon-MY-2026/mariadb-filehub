@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+python-multipart
+mariadb
+boto3
+openai
+pymupdf
+python-docx
+passlib[bcrypt]
+python-jose[cryptography]
+python-dotenv
+uuid
+httpx

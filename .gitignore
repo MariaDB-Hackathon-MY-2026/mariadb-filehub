@@ -1,0 +1,31 @@
+# ── Secrets — NEVER commit these ──────────────────────────────
+.env
+*.env
+.env.local
+.env.production
+
+# ── Node.js ───────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+
+# ── Python ────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+dist/
+build/
+
+# ── OS ────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Editor ────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
