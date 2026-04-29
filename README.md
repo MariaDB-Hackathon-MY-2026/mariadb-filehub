@@ -4,6 +4,41 @@ A Chrome browser extension for uploading, browsing, and semantically searching f
 
 ---
 
+## Screenshots
+
+| Files Tab | Dashboard | Trash & Recovery |
+|-----------|-----------|-----------------|
+| ![Files Tab](docs/screenshoots/File-Tab.png) | ![Dashboard](docs/screenshoots/Dashboard.png) | ![Trash](docs/screenshoots/Trash.png) |
+
+---
+
+## Why File Vault?
+
+Most file managers treat files as dumb blobs. **File Vault** treats every file as knowledge:
+
+### 🧠 Search by meaning, not filename
+Traditional search tools match exact keywords. File Vault uses **OpenAI embeddings + MariaDB's native VECTOR type** to find files by semantic similarity — search *"quarterly revenue report"* and find the right PDF even if it's named `final_v3_REAL.pdf`.
+
+### 🗄️ MariaDB as a first-class AI database
+We use **MariaDB 11.6+** beyond a plain relational store:
+- **`VECTOR(1536)` column** stores embeddings natively — no separate vector database needed
+- **`VECTOR INDEX` (ANN)** for fast approximate nearest-neighbour search at scale
+- **System-Versioned Temporal Tables** power the Trash & Recovery feature — every row change is recorded automatically, enabling time-travel queries and full file history
+
+### 🔄 Never lose a file again
+The **Backup & Recovery** tab is built entirely on MariaDB's temporal tables. Deleted files are soft-deleted and can be restored in one click. Every rename, move, and delete is logged with a full timestamp — you can view the complete change history of any file.
+
+### ☁️ Cloud storage, local intelligence
+Raw files live in **Cloudflare R2** (S3-compatible, zero egress fees). All AI processing (text extraction, embeddings, transcription) runs server-side — the browser extension stays lightweight and just talks REST.
+
+### 🌐 Works with files from anywhere
+Import files directly from **Google Drive, OneDrive, Dropbox, S3 presigned URLs, or any direct link** — no manual download needed.
+
+### 🔒 Multi-user with JWT auth
+Full user authentication with register, login, and **email OTP password reset**. Every query is scoped to the authenticated user — safe for shared deployments.
+
+---
+
 ## Architecture
 
 ```
