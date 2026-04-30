@@ -1,5 +1,13 @@
 # File Vault
 
+![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.111-009688?logo=fastapi&logoColor=white)
+![MariaDB](https://img.shields.io/badge/MariaDB-11.6+-003545?logo=mariadb&logoColor=white)
+![Cloudflare R2](https://img.shields.io/badge/Cloudflare_R2-Object_Storage-F38020?logo=cloudflare&logoColor=white)
+![OpenAI](https://img.shields.io/badge/OpenAI-Embeddings_%7C_GPT--4o_%7C_Whisper-412991?logo=openai&logoColor=white)
+![Chrome Extension](https://img.shields.io/badge/Chrome-Extension_MV3-4285F4?logo=googlechrome&logoColor=white)
+![JWT](https://img.shields.io/badge/Auth-JWT_%2B_bcrypt-000000?logo=jsonwebtokens&logoColor=white)
+
 A Chrome browser extension for uploading, browsing, and semantically searching files. Files are stored in **Cloudflare R2**; metadata and vector embeddings live in **MariaDB 11.6+**. All processing (text extraction, AI embeddings, transcription) happens on a local API server — the extension only talks HTTP.
 
 ---
