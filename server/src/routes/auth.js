@@ -1,11 +1,11 @@
-const express = require('express');
+﻿const express = require('express');
 const bcrypt  = require('bcryptjs');
 const jwt     = require('jsonwebtoken');
 const { query }    = require('../db');
 const { sendOtp }  = require('../mailer');
 
 const router = express.Router();
-const JWT_SECRET = process.env.JWT_SECRET || 'filevault-dev-secret';
+const JWT_SECRET = process.env.JWT_SECRET || 'FILEHUB-dev-secret';
 const TOKEN_TTL  = '7d';
 
 // POST /auth/register

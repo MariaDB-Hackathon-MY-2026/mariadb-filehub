@@ -1,4 +1,4 @@
-USE filevault;
+﻿USE FILEHUB;
 
 CREATE TABLE IF NOT EXISTS password_resets (
     id         BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,

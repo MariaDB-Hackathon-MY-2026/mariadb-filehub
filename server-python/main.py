@@ -1,4 +1,4 @@
-import os
+﻿import os
 from dotenv import load_dotenv
 load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
 
@@ -8,7 +8,7 @@ from fastapi.responses import JSONResponse
 
 from routes import auth, files, search, folders, stats, recovery
 
-app = FastAPI(title="File Vault API", version="1.0.0")
+app = FastAPI(title="File Hub API", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -40,7 +40,7 @@ if __name__ == "__main__":
     import uvicorn
 
     port = int(os.getenv("PORT", 3001))
-    print(f"File Vault API (Python) running on http://localhost:{port}")
+    print(f"File Hub API (Python) running on http://localhost:{port}")
 
     missing = [v for v in ["OPENAI_API_KEY", "JWT_SECRET", "R2_ACCOUNT_ID"] if not os.getenv(v)]
     if missing:

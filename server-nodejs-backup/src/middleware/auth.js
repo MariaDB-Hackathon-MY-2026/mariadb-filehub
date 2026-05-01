@@ -1,5 +1,5 @@
-const jwt = require('jsonwebtoken');
-const JWT_SECRET = process.env.JWT_SECRET || 'filevault-dev-secret';
+﻿const jwt = require('jsonwebtoken');
+const JWT_SECRET = process.env.JWT_SECRET || 'FILEHUB-dev-secret';
 
 function authMiddleware(req, res, next) {
   const authHeader = req.headers.authorization;

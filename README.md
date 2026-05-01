@@ -1,4 +1,4 @@
-# File Vault
+﻿# File Hub
 
 ![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.111-009688?logo=fastapi&logoColor=white)
@@ -20,12 +20,12 @@ A Chrome browser extension for uploading, browsing, and semantically searching f
 
 ---
 
-## Why File Vault?
+## Why File Hub?
 
-Most file managers treat files as dumb blobs. **File Vault** treats every file as knowledge:
+Most file managers treat files as dumb blobs. **File Hub** treats every file as knowledge:
 
 ### 🧠 Search by meaning, not filename
-Traditional search tools match exact keywords. File Vault uses **OpenAI embeddings + MariaDB's native VECTOR type** to find files by semantic similarity — search *"quarterly revenue report"* and find the right PDF even if it's named `final_v3_REAL.pdf`.
+Traditional search tools match exact keywords. File Hub uses **OpenAI embeddings + MariaDB's native VECTOR type** to find files by semantic similarity — search *"quarterly revenue report"* and find the right PDF even if it's named `final_v3_REAL.pdf`.
 
 ### 🗄️ MariaDB as a first-class AI database
 We use **MariaDB 11.6+** beyond a plain relational store:
@@ -162,7 +162,7 @@ Run the SQL migrations **in order** using HeidiSQL, DBeaver, or the MariaDB CLI:
 ```sql
 -- Connect to MariaDB first, then:
 
-source sql/schema.sql;                    -- creates the filevault database + files table
+source sql/schema.sql;                    -- creates the FILEHUB database + files table
 source sql/migration_auth.sql;            -- adds users table + user_id to files
 source sql/migration_password_reset.sql;  -- adds password_resets table
 source sql/migration_wave3.sql;           -- adds folders, tags, file_tags, is_favourite
@@ -200,13 +200,13 @@ DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_USER=root
 DB_PASSWORD=your_mariadb_password
-DB_NAME=filevault
+DB_NAME=FILEHUB
 
 # Cloudflare R2  (Dashboard → R2 → Manage API tokens)
 R2_ACCOUNT_ID=your_cloudflare_account_id
 R2_ACCESS_KEY_ID=your_r2_access_key_id
 R2_SECRET_ACCESS_KEY=your_r2_secret_access_key
-R2_BUCKET=filevault
+R2_BUCKET=FILEHUB
 
 # OpenAI  (https://platform.openai.com/api-keys)
 OPENAI_API_KEY=sk-...your_openai_api_key
@@ -263,7 +263,7 @@ Server starts at **http://localhost:3001**
 1. Open Chrome and go to `chrome://extensions`
 2. Enable **Developer mode** (top-right toggle)
 3. Click **Load unpacked** → select the `extension/` folder
-4. The **File Vault** icon appears in your Chrome toolbar
+4. The **File Hub** icon appears in your Chrome toolbar
 5. Click the icon → Settings (⚙) → set **Server URL** to `http://localhost:3001` → **SAVE**
 6. Register an account and start uploading files
 

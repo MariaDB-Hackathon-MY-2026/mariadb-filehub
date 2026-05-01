@@ -1,4 +1,4 @@
-import os
+﻿import os
 import boto3
 from botocore.config import Config
 
@@ -19,7 +19,7 @@ def _s3():
     return _client
 
 
-BUCKET = lambda: os.getenv("R2_BUCKET", "filevault")
+BUCKET = lambda: os.getenv("R2_BUCKET", "FILEHUB")
 
 
 def put_object(key: str, data: bytes, content_type: str) -> None:

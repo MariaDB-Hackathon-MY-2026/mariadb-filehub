@@ -1,4 +1,4 @@
-import os
+﻿import os
 import mariadb
 from typing import Any, Tuple
 
@@ -13,8 +13,8 @@ def _get_pool() -> mariadb.ConnectionPool:
             port=int(os.getenv("DB_PORT", "3306")),
             user=os.getenv("DB_USER", "root"),
             password=os.getenv("DB_PASSWORD", ""),
-            database=os.getenv("DB_NAME", "filevault"),
-            pool_name="filevault",
+            database=os.getenv("DB_NAME", "FILEHUB"),
+            pool_name="FILEHUB",
             pool_size=5,
         )
     return _pool

@@ -1,4 +1,4 @@
-require('dotenv').config({ path: require('path').join(__dirname, '..', '.env') });
+﻿require('dotenv').config({ path: require('path').join(__dirname, '..', '.env') });
 
 const express = require('express');
 const cors = require('cors');
@@ -29,7 +29,7 @@ app.use((err, _req, res, _next) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`File Vault API running on http://localhost:${PORT}`);
+  console.log(`File Hub API running on http://localhost:${PORT}`);
   // Warn about missing critical env vars
   if (!process.env.SMTP_USER) console.warn('⚠  SMTP_USER not set — password reset emails will fail');
   if (!process.env.JWT_SECRET) console.warn('⚠  JWT_SECRET not set — using insecure default');

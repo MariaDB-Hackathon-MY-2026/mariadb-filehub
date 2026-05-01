@@ -1,4 +1,4 @@
-import os
+﻿import os
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -11,8 +11,8 @@ def send_otp(to_email: str, otp: str) -> None:
         raise RuntimeError("SMTP_USER not configured")
 
     msg = MIMEMultipart("alternative")
-    msg["Subject"] = "File Vault — Password Reset Code"
-    msg["From"] = f"File Vault <{smtp_user}>"
+    msg["Subject"] = "File Hub — Password Reset Code"
+    msg["From"] = f"File Hub <{smtp_user}>"
     msg["To"] = to_email
 
     html = f"""

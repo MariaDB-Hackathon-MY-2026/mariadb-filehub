@@ -1,4 +1,4 @@
-USE filevault;
+﻿USE FILEHUB;
 
 -- Required: allow ALTERing a table when adding system versioning
 SET @@session.system_versioning_alter_history = 1;

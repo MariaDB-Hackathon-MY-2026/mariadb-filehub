@@ -1,4 +1,4 @@
-USE filevault;
+﻿USE FILEHUB;
 
 -- Folders
 CREATE TABLE IF NOT EXISTS folders (

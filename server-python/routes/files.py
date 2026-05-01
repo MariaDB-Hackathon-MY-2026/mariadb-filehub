@@ -1,4 +1,4 @@
-import os
+﻿import os
 import re
 import uuid
 import urllib.request
@@ -173,7 +173,7 @@ def import_url(body: ImportUrlIn, user: dict = Depends(get_current_user)):
 
     try:
         with httpx.Client(follow_redirects=True, timeout=60,
-                          headers={"User-Agent": "Mozilla/5.0 FileVault/1.0"}) as client:
+                          headers={"User-Agent": "Mozilla/5.0 FILEHUB/1.0"}) as client:
             response = client.get(download_url)
 
         if response.status_code != 200:

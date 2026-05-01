@@ -1,6 +1,6 @@
-{
+﻿{
   "manifest_version": 3,
-  "name": "File Vault",
+  "name": "File Hub",
   "version": "1.0.0",
   "description": "Upload, browse, search, and download your files with AI similarity search.",
   "permissions": ["storage", "clipboardRead", "activeTab", "scripting", "tabs", "windows"],

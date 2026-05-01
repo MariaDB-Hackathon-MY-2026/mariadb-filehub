@@ -1,4 +1,4 @@
-USE filevault;
+﻿USE FILEHUB;
 
 -- Users table
 CREATE TABLE IF NOT EXISTS users (

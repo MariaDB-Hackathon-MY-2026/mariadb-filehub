@@ -1,4 +1,4 @@
-const express = require('express');
+﻿const express = require('express');
 const multer  = require('multer');
 const { v4: uuidv4 } = require('uuid');
 const path    = require('path');
@@ -138,7 +138,7 @@ router.post('/import-url', async (req, res) => {
     // Download the file (max 100 MB, 60 s timeout)
     const response = await fetch(downloadUrl, {
       redirect: 'follow',
-      headers: { 'User-Agent': 'Mozilla/5.0 FileVault/1.0' },
+      headers: { 'User-Agent': 'Mozilla/5.0 FILEHUB/1.0' },
       signal: AbortSignal.timeout(60_000),
     });
     if (!response.ok) throw new Error(`${source} returned ${response.status} ${response.statusText}`);

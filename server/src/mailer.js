@@ -1,4 +1,4 @@
-const nodemailer = require('nodemailer');
+﻿const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -10,9 +10,9 @@ const transporter = nodemailer.createTransport({
 
 async function sendOtp(toEmail, otp) {
   await transporter.sendMail({
-    from: `"File Vault" <${process.env.SMTP_USER}>`,
+    from: `"File Hub" <${process.env.SMTP_USER}>`,
     to: toEmail,
-    subject: 'Your File Vault Password Reset Code',
+    subject: 'Your File Hub Password Reset Code',
     html: `
       <div style="font-family:monospace;background:#07080d;color:#e2e8f0;padding:32px;border-radius:8px;max-width:400px">
         <h2 style="color:#f59e0b;letter-spacing:4px">FILE<span>VAULT</span></h2>
